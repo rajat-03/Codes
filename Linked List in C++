@@ -1,0 +1,343 @@
+#include<iostream>
+#include<windows.h>
+
+using namespace std;
+
+ //for changing text color
+        HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    
+struct node
+{
+    int data;
+    struct node* link;
+};
+
+struct node* root= NULL;
+
+void append()
+{
+    //creating a new node
+    struct node* temp;
+    temp=(struct node*)malloc(sizeof(struct node));
+
+    //taking input in new node
+    cout<<"\nenter element: ";
+    cin>>temp->data;
+
+    temp->link=NULL;
+
+    //if 1st node then
+    if(root==NULL)
+    {
+        root=temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+
+    }
+    else
+    {
+        struct node* p;
+        p=root;
+
+        while(p->link != NULL)
+        {
+            p=p->link;
+        }
+        p->link=temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+        
+    }
+
+}
+
+void display()
+{
+    struct node* temp;
+    temp=root;
+
+    if(root==NULL)
+    {
+                SetConsoleTextAttribute(h, 12);
+        cout<<"\nList is empty\n";
+                SetConsoleTextAttribute(h, 7);
+
+    }
+    else
+    {
+        cout<<endl;
+        while(temp != NULL)
+        {
+            SetConsoleTextAttribute(h, 8);
+            cout<<temp->data<<" ";
+            SetConsoleTextAttribute(h, 7);
+            
+            temp= temp->link;
+        }
+        cout<<endl;
+    }
+
+}
+
+int length()
+{
+    int count=0;
+
+    struct node* temp;
+    temp=root;
+
+    if(temp==NULL)
+    {
+                SetConsoleTextAttribute(h, 12);
+        cout<<"\nList is empty\n";
+                SetConsoleTextAttribute(h, 7);
+
+    }
+    else
+    {
+        while(temp != NULL)
+        {
+            count++;
+            temp=temp->link;
+        }
+        
+    }
+    return count;
+}
+
+void addAtBegin()
+{
+    struct node* temp;
+    temp=(struct node*)malloc(sizeof(struct node));
+    
+    cout<<"\nEnter node data: ";
+    cin>>temp->data;
+    temp->link=NULL;
+
+    if(root==NULL)
+    {
+        root=temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+
+    }
+    else
+    {
+        temp->link=root;
+        root=temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+
+    }
+}
+
+void addAfter()
+{
+    int location,len,i=1;
+    struct node* temp,*p;
+    
+    cout<<"\nEnter after node: ";
+    cin>>location;
+
+    len=length();
+
+    if(location>len)
+    {
+                SetConsoleTextAttribute(h, 12);
+        cout<<"\nInvalid location";
+        cout<<"\nCurrent list is having "<<len<<" nodes\n";
+                SetConsoleTextAttribute(h, 7);
+
+    }
+    else
+    {
+        p=root;
+        while(i<location)
+        {
+            p=p->link;
+            i++;
+        }
+
+
+        temp=(struct node*)malloc(sizeof(struct node));
+        cout<<"\nEnter node data: ";
+        cin>>temp->data;
+        temp->link=NULL;
+
+        temp->link= p->link;
+        p->link=temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+
+
+    }
+}
+
+void deleteNode()
+{
+    struct node* temp;
+    int location,len;
+
+    cout<<"\nEnter delete location: ";
+    cin>>location;
+
+    //getting total length of the node
+    len=length();
+
+    if(location>len)
+    {
+                SetConsoleTextAttribute(h, 12);
+        cout<<"\nInvalid location";
+        cout<<"\nCurrent list is having "<<len<<" nodes\n";
+                SetConsoleTextAttribute(h, 7);
+
+    }
+    else if(location==1)
+    {
+        temp = root;
+        root = temp->link;
+        temp->link = NULL;
+        free(temp);
+
+                SetConsoleTextAttribute(h, 12);
+        cout<<"\nNode deleted successfully\n";
+                SetConsoleTextAttribute(h, 7);
+
+    }
+    else
+    {
+        // for deleting middle and last node
+
+        //*p for getting on prev node of getting deleted node 
+        struct node* p = root;
+
+        //*q for selected node of deletion
+        struct node* q;
+        int i=1;
+
+        while(i<location-1)
+        {
+            p = p->link;
+            i++;
+        }
+
+        q = p->link;
+
+        p->link = q->link;
+        q->link = NULL;
+        free(q);
+
+                SetConsoleTextAttribute(h, 12);
+        cout<<"\nNode deleted successfully\n";
+                SetConsoleTextAttribute(h, 7);
+
+
+    }
+    
+}
+
+void swapAdjacent()
+{
+    int location,i=1,len;
+    struct node *p, *q, *r;
+
+    cout<<"\nEnter swap location: ";
+    cin>>location;
+
+    len=length();
+
+    if(location >=len )
+    {
+        SetConsoleTextAttribute(h, 12);
+        cout<<"\nError! Swapping can't be performed\n";
+        SetConsoleTextAttribute(h, 7);
+    
+    }
+    else
+    {
+
+        p = root;
+        while(i<location-1)
+        {
+            p = p->link;
+            i++;
+        }
+
+        q = p->link;
+        r = q->link;
+
+        //now swapping part
+
+        q->link = r->link;
+        r->link = q;
+        p->link = r;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nNodes Swapped Successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    
+}
+
+int main()
+{
+    int choice,len;
+
+    while(1)
+    {
+
+       
+
+        cout<<"\n1. Append node \n2. Display";
+        cout<<"\n3. Length \n4. Add at begin";
+        cout<<"\n5. Add After \n6. Delete";
+        cout<<"\n7. Swap Adjacent Node \n8. Exit";
+
+        SetConsoleTextAttribute(h, 9);
+        cout<<"\nEnter choice: ";
+        cin>>choice;
+        SetConsoleTextAttribute(h, 7);
+
+        switch (choice)
+        {
+         case 1: append();
+            break;
+
+         case 2: display();
+            break;
+
+         case 3: len=length();
+            cout<<"\nLength: "<<len<<endl;
+            break;
+
+         case 4: addAtBegin();
+            break;
+
+         case 5: addAfter();
+            break;
+
+         case 6: deleteNode();
+            break;
+
+         case 7: swapAdjacent();
+            break;
+
+         case 8: exit(1);
+            break;
+        
+         default: cout<<"\nInvalid choice\n";
+            break;
+        }
+    }
+    return 0;
+}
