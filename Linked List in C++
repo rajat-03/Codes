@@ -289,19 +289,40 @@ void swapAdjacent()
     
 }
 
+void reverseList()
+{
+
+    struct node* current=root;
+    struct node* prev=NULL;
+    struct node* temp=NULL;
+
+    while(current != NULL)
+    {
+        temp=current->link;
+        current->link=prev;
+        prev = current;
+        current = temp;
+    }
+
+    root=prev;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nList reversed successfully\n";
+        SetConsoleTextAttribute(h, 7);
+
+}
+
 int main()
 {
     int choice,len;
 
     while(1)
-    {
-
-       
-
+    {  
         cout<<"\n1. Append node \n2. Display";
         cout<<"\n3. Length \n4. Add at begin";
         cout<<"\n5. Add After \n6. Delete";
-        cout<<"\n7. Swap Adjacent Node \n8. Exit";
+        cout<<"\n7. Swap Adjacent Node"; 
+        cout<<"\n8. Reverse the List \n9. Exit";
 
         SetConsoleTextAttribute(h, 9);
         cout<<"\nEnter choice: ";
@@ -332,7 +353,10 @@ int main()
          case 7: swapAdjacent();
             break;
 
-         case 8: exit(1);
+         case 8: reverseList();
+            break;
+
+         case 9: exit(1);
             break;
         
          default: cout<<"\nInvalid choice\n";
