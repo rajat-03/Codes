@@ -52,9 +52,6 @@ void append()
         SetConsoleTextAttribute(h,7);
 
     }
-
-
-
 }
 
 void display()
@@ -256,6 +253,26 @@ void deleteNode()
     }
 }
 
+void reverseList()
+{
+        struct node* current=root;
+        struct node* nextNode= NULL;
+        struct node* newRoot= root;
+
+        while(current !=0)
+        {
+            nextNode = current->right;
+            current->right = current->left;
+            current->left = nextNode;
+            newRoot = current;
+            current = nextNode;
+        } 
+        root=newRoot;
+
+        SetConsoleTextAttribute(h, 10);
+        cout<<"\nList reversed successfully\n";
+        SetConsoleTextAttribute(h, 7);
+}
 int main()
 {
     
@@ -266,7 +283,7 @@ int main()
         cout<<"\n1. Append node \n2. Display";
         cout<<"\n3. Length \n4. Add at begin";
         cout<<"\n5. Add After \n6. Delete";
-        cout<<"\n7. Exit";
+        cout<<"\n7. Reverse the List \n8.Exit";
 
         SetConsoleTextAttribute(h, 9);
         cout<<"\nEnter choice: ";
@@ -294,7 +311,10 @@ int main()
          case 6: deleteNode();
             break;
 
-         case 7: exit(1);
+            case 7: reverseList();
+            break;
+
+         case 8: exit(1);
             break;
         
          default: cout<<"\nInvalid choice\n";
