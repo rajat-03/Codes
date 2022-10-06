@@ -1,0 +1,100 @@
+create table PROFESSOR
+(
+Prof_id number(5) constraint prf_pk PRIMARY KEY,
+ Prof_name varchar(40) constraint prf_nn NOT NULL,
+ Email varchar(40),
+ Mobile char(13),
+ Specialty varchar(20),
+ Dept_id varchar(8)
+); 
+
+create table SCHOOL
+(
+SCode varchar(8) constraint scl_pk PRIMARY KEY, 
+Scl_name varchar(30) constraint scl_nn NOT NULL, 
+Prof_id constraint sci_fk references PROFESSOR,
+ Location varchar(20)
+);
+
+create table DEPARTMENT
+(
+Dept_id varchar(8) constraint dept_pk PRIMARY KEY,
+Dname varchar(20) constraint dept_nn NOT NULL,
+SCode constraint dept_fk1 references SCHOOL,
+Prof_id constraint dept_fk2 references PROFESSOR
+);
+Alter table professor add constraint prf_fk foreign key(dept_id) references department;
+
+create table COURSE
+(
+Crs_code char(8) PRIMARY KEY,
+ Crs_name varchar(20),
+ Description varchar(400),
+ Credits number(1),
+ Hours number(1)
+); 
+
+Select table_name,constraint_name,constraint_type from user_constraints where table_name=’COURSE’;
+create table CLASS
+(
+Cls_code char(20) constraint cls_pk PRIMARY KEY, 
+Slot varchar(4), 
+Stime timestamp(0), 
+Etime timestamp(0), 
+Crs_code constraints cls_fk1 references COURSE, 
+Prof_id constraint cls_fk2 references PROFESSOR, 
+Room_no varchar(6),  
+Sem_code varchar(8), 
+Day_of_week varchar(10)
+);
+
+
+create table SEMESTER
+(
+Sem_code varchar(6) PRIMARY KEY, 
+Term varchar(8),
+ Year number(4), 
+Sdate date,
+ Edate date
+);
+
+
+create table STUDENT
+(
+Reg_no char(9) PRIMARY KEY,
+ Sname varchar(40),
+ Address varchar(60),
+ DoB date,
+ Email varchar(30),
+ Mobile char(13),
+ Dept_id references DEPARTMENT,
+ Prof_id  references PROFESSOR
+);
+
+
+create table ENROLL
+(
+Cls_code references CLASS ,
+ Reg_no references STUDENT,
+ Enroll_time timestamp(0),
+ Grade char(1),
+Primary key(Cls_code, Reg_no)
+);
+
+create table STUDENT_VISA
+(
+Reg_no references student, 
+Visa_status varchar(10),
+Primary key(Reg_no)
+);
+
+create table PROGRAMME
+(
+Prog_code varchar(6) primary key, 
+Prog_name varchar(20),
+ Prog_preamble varchar(400), 
+Scode references SCHOOL, 
+Dept_id references DEPARTMENT
+);
+
+
