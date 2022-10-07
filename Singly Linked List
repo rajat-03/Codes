@@ -1,0 +1,359 @@
+// Singly Linked List implementation as the LIST ADT
+
+#include <iostream>
+using namespace std;
+
+template <class T>
+class Linked_List
+{
+private:
+    struct Node
+    {
+        T data;
+        struct Node *next;
+    };
+
+    struct Node *Head;
+
+public:
+    Linked_List()
+    {
+        Head = NULL;
+    }
+    void insert_Beg();
+    void insert_End(); // Insert at the end
+    void insert_Position();
+    void display(); // Display all elements in the list
+    int length();
+    void search();
+    void delete_Beg();
+    void delete_End(int d);
+    void delete_Position(int d);
+};
+
+// Insert at the End
+template <class T>
+void Linked_List<T>::insert_End()
+{
+    // Create the new Node
+    struct Node *nn = new struct Node;
+    T ele;
+    cout << "\n Enter the Element:" << endl;
+    cin >> ele;
+
+    nn->data = ele;
+    nn->next = NULL;
+
+    // To insert or add the new Node into the Linked List
+
+    if (Head == NULL)
+    {
+        Head = nn;
+    }
+    else // There are some Nodes already in the List
+    {
+        struct Node *t; // Traverse pointer
+
+        t = Head;
+
+        while (t->next != NULL) // Move to the last Node of the Linked list
+        {
+            t = t->next;
+        }
+
+        t->next = nn; // Add the new Node as the last Node in the list
+    }
+}
+
+// Insert at the beginning
+template <class T>
+void Linked_List<T>::insert_Beg()
+{
+    // Create the new Node
+    struct Node *nn = new struct Node;
+    T ele;
+    cout << "\n Enter the Element:" << endl;
+    cin >> ele;
+
+    nn->data = ele;
+
+    nn->next = NULL;
+
+    // Modify the link
+
+    nn->next = Head;
+
+    Head = nn;
+}
+
+// Insert at the given position
+template <class T>
+void Linked_List<T>::insert_Position()
+{
+
+    // Create the new Node
+    struct Node *nn = new struct Node;
+
+    T ele;
+    int pos;
+
+    cout << "\n\n Insert at the given position !!!" << endl;
+    cout << "\n Enter the Element:" << endl;
+    cin >> ele;
+
+    cout << "\n Enter the Position:" << endl;
+    cin >> pos;
+
+    nn->data = ele;
+
+    nn->next = NULL;
+
+    // Modify the link
+
+    struct Node *t;
+
+    t = Head;
+
+    for (int i = 1; i < pos - 1; i++)
+    {
+        t = t->next;
+    }
+
+    nn->next = t->next;
+    t->next = nn;
+}
+
+// Display
+
+template <class T>
+void Linked_List<T>::display()
+{
+
+    struct Node *t;
+    t = Head;
+
+    cout << "\n\n";
+
+    cout << "Head ==> ";
+    while (t != NULL)
+    {
+        cout << t->data << " ==> ";
+
+        t = t->next;
+    }
+
+    cout << "NULL" << endl;
+}
+
+template <class T>
+int Linked_List<T>::length()
+{
+    int count = 0;
+
+    struct Node *temp;
+    temp = Head;
+
+    if (temp == NULL)
+    {
+        cout << "\nList is empty\n";
+    }
+    else
+    {
+        while (temp != NULL)
+        {
+            count++;
+            temp = temp->next;
+        }
+    }
+    return count;
+}
+
+template <class T>
+void Linked_List<T>::search()
+{
+    Node *temp = Head;
+
+    if (temp == NULL)
+    {
+        cout << "\nList is empty\n";
+    }
+    else
+    {
+        int Sele, flag = 0;
+        cout << "\nEnter ele to be search: ";
+        cin >> Sele;
+
+        while (temp != NULL)
+        {
+            if (temp->data == Sele)
+            {
+                flag = 1;
+                break;
+            }
+            temp = temp->next;
+        }
+
+        if (flag == 1)
+        {
+            cout << "\nElement found in the list\n";
+        }
+        else
+        {
+            cout << "\nElement do not exist in the list\n";
+        }
+    }
+}
+
+template <class T>
+void Linked_List<T>::delete_Beg()
+{
+    struct Node *temp;
+    temp = Head;
+    Head = temp->next;
+    temp->next = NULL;
+    free(temp);
+
+    cout << "\nNode deleted successfully\n";
+}
+
+template <class T>
+void Linked_List<T>::delete_End(int len)
+{
+
+    // for deleting middle and last Node
+
+    //*p for getting on prev Node of getting deleted Node
+    struct Node *p = Head;
+    int location = len;
+
+    //*q for selected Node of deletion
+    struct Node *q;
+    int i = 1;
+
+    while (i < location - 1)
+    {
+        p = p->next;
+        i++;
+    }
+
+    q = p->next;
+
+    p->next = q->next;
+    q->next = NULL;
+    free(q);
+
+    cout << "\nNode deleted successfully\n";
+}
+
+template <class T>
+void Linked_List<T>::delete_Position(int len)
+{
+
+    struct Node *temp;
+    int location;
+
+    cout << "\nEnter delete location: ";
+    cin >> location;
+
+    // getting total length of the Node
+
+    if (location > len)
+    {
+        cout << "\nInvalid location";
+        cout << "\nCurrent list is having " << len << " Nodes\n";
+    }
+
+    // for deleting middle and last Node
+
+    //*p for getting on prev Node of getting deleted Node
+    struct Node *p = Head;
+
+    //*q for selected Node of deletion
+    struct Node *q;
+    int i = 1;
+
+    while (i < location - 1)
+    {
+        p = p->next;
+        i++;
+    }
+
+    q = p->next;
+
+    p->next = q->next;
+    q->next = NULL;
+    free(q);
+
+    cout << "\nNode deleted successfully\n";
+}
+
+int main()
+{
+    class Linked_List<int> L1;
+
+    int len, choice;
+
+    while (1)
+    {
+        cout << "\n1. Insert At End \n2. Insert At Begin";
+        cout << "\n3. Insert At The Given Poisition \n4. Display";
+        cout << "\n5. Total No. of Elements \n6. Search Element";
+        cout << "\n7. Delete At Begin";
+        cout << "\n8. Delete At End";
+        cout << "\n9. Delete At The Given Position";
+        cout << "\n10. Exit";
+
+        cout << "\nEnter choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            L1.insert_End();
+            break;
+
+        case 2:
+            L1.insert_Beg();
+            break;
+
+        case 3:
+            L1.insert_Position();
+            break;
+
+        case 4:
+            L1.display();
+            break;
+
+        case 5:
+            len = L1.length();
+            cout << "\nLength: " << len << endl;
+            break;
+
+        case 6:
+            L1.search();
+            break;
+
+        case 7:
+            L1.delete_Beg();
+            break;
+
+        case 8:
+            L1.delete_End(len);
+            break;
+
+        case 9:
+            L1.delete_Position(len);
+            break;
+
+        case 10:
+            exit(1);
+            break;
+
+        default:
+            cout << "\nInvalid choice\n";
+            break;
+        }
+    }
+
+    return 0;
+}
