@@ -1,0 +1,355 @@
+#include <iostream>
+#include <windows.h>
+
+using namespace std;
+
+// for changing text color
+HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+
+template <class T>
+class Doubly_LList
+{
+private:
+    struct node
+    {
+        T data;
+        struct node *left;
+        struct node *right;
+    };
+
+    struct node *Head = NULL;
+
+public:
+    Doubly_LList()
+    {
+        Head = NULL;
+    }
+
+    void append();
+    void display();
+    int length();
+    void addAtBegin();
+    void addAfter();
+    void deleteNode(int len);
+    void reverseList();
+};
+
+template <class T>
+void Doubly_LList<T>::append()
+{
+    struct node *temp=new struct node;
+    
+
+    cout << "\nEnter data: ";
+    cin >> temp->data;
+
+    temp->left = NULL;
+    temp->right = NULL;
+
+    if (Head == NULL)
+    {
+        Head = temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout << "\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else
+    {
+        struct node *p;
+        p = Head;
+
+        while (p->right != NULL)
+        {
+            p = p->right;
+        }
+
+        p->right = temp;
+        temp->left = p;
+
+        SetConsoleTextAttribute(h, 10);
+        cout << "\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+}
+
+template <class T>
+void Doubly_LList<T>::display()
+{
+    struct node *temp = Head;
+
+    if (temp == NULL)
+    {
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nList is empty\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else
+    {
+        SetConsoleTextAttribute(h, 10);
+        cout << "\nList nodes are: \n";
+        SetConsoleTextAttribute(h, 7);
+
+    cout<<"Head <=> ";
+
+        while (temp != NULL)
+        {
+            cout << temp->data << " <=> ";
+            temp = temp->right;
+        }
+        cout << "Tail"<< endl;
+    }
+}
+
+template <class T>
+int Doubly_LList<T>::length()
+{
+    int count = 0;
+    struct node *temp = Head;
+
+    if (temp == NULL)
+    {
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nList is empty\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else
+    {
+        while (temp != NULL)
+        {
+            count++;
+            temp = temp->right;
+        }
+    }
+    return count;
+}
+
+template <class T>
+void Doubly_LList<T>::addAtBegin()
+{
+    struct node *temp = new struct node;
+
+    cout << "\nEnter node data: ";
+    cin >> temp->data;
+
+    temp->left = NULL;
+    temp->right = NULL;
+
+    if (Head == NULL)
+    {
+        Head = temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout << "\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else
+    {
+        temp->right = Head;
+        Head->left = temp;
+        Head = temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout << "\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+}
+
+template <class T>
+void Doubly_LList<T>::addAfter()
+{
+    int location, len, i = 1;
+    struct node *temp, *p;
+
+    cout << "\nEnter after node: ";
+    cin >> location;
+
+    len = length();
+
+    if (location >= len)
+    {
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nInvalid location";
+        cout << "\nCurrent list is having " << len << " nodes\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else
+    {
+        temp = new struct node;
+        cout << "\nEnter node data: ";
+        cin >> temp->data;
+
+        temp->left = NULL;
+        temp->right = NULL;
+
+        p = Head;
+        while (i < location)
+        {
+            p = p->right;
+            i++;
+        }
+
+        temp->right = p->right;
+        p->right->left = temp;
+        temp->left = p;
+        p->right = temp;
+
+        SetConsoleTextAttribute(h, 10);
+        cout << "\nNode added successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+}
+
+template <class T>
+void Doubly_LList<T>::deleteNode(int len)
+{
+
+    int location;
+
+    cout << "\nEnter node location: ";
+    cin >> location;
+
+    if (location > len)
+    {
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nInvalid location";
+        cout << "\nCurrent list is having " << len << " nodes\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else if (location == 1)
+    {
+        struct node *temp = Head;
+        Head = Head->right;
+        Head->left = NULL;
+        temp->right = NULL;
+        free(temp);
+
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nNode deleted successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else if (location == len)
+    {
+        struct node *temp = Head;
+        int i = 1;
+
+        while (i < location)
+        {
+            temp = temp->right;
+            i++;
+        }
+
+        temp->left->right = NULL;
+        temp->left = NULL;
+        free(temp);
+
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nNode deleted successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+    else
+    {
+        struct node *temp = Head;
+        int i = 1;
+
+        while (i < location)
+        {
+            temp = temp->right;
+            i++;
+        }
+
+        temp->left->right = temp->right;
+        temp->right->left = temp->left;
+        temp->right = NULL;
+        temp->left = NULL;
+        free(temp);
+
+        SetConsoleTextAttribute(h, 12);
+        cout << "\nNode deleted successfully\n";
+        SetConsoleTextAttribute(h, 7);
+    }
+}
+
+template <class T>
+void Doubly_LList<T>::reverseList()
+{
+    struct node *current = Head;
+    struct node *nextNode = NULL;
+    struct node *newRoot = Head;
+
+    while (current != 0)
+    {
+        nextNode = current->right;
+        current->right = current->left;
+        current->left = nextNode;
+        newRoot = current;
+        current = nextNode;
+    }
+    Head = newRoot;
+
+    SetConsoleTextAttribute(h, 10);
+    cout << "\nList reversed successfully\n";
+    SetConsoleTextAttribute(h, 7);
+}
+int main()
+{
+
+    class Doubly_LList<int> DL1;
+
+    int choice, len;
+
+    while (1)
+    {
+        cout << "\n1. Append node \n2. Display";
+        cout << "\n3. Length \n4. Add at begin";
+        cout << "\n5. Add After \n6. Delete";
+        cout << "\n7. Reverse the List \n8.Exit";
+
+        SetConsoleTextAttribute(h, 9);
+        cout << "\nEnter choice: ";
+        cin >> choice;
+        SetConsoleTextAttribute(h, 7);
+
+        switch (choice)
+        {
+        case 1:
+            DL1.append();
+            break;
+
+        case 2:
+            DL1.display();
+            break;
+
+        case 3:
+            len = DL1.length();
+            cout << "\nLength: " << len << endl;
+            break;
+
+        case 4:
+            DL1.addAtBegin();
+            break;
+
+        case 5:
+            DL1.addAfter();
+            break;
+
+        case 6:
+            len = DL1.length();
+            DL1.deleteNode(len);
+            break;
+
+        case 7:
+            DL1.reverseList();
+            break;
+
+        case 8:
+            exit(1);
+            break;
+
+        default:
+            cout << "\nInvalid choice\n";
+            break;
+        }
+    }
+    return 0;
+}
