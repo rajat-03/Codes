@@ -27,8 +27,8 @@ public:
     int length();
     void search();
     void delete_Beg();
-    void delete_End(int d);
-    void delete_Position(int d);
+    void delete_End();
+    void delete_Position(int len);
 };
 
 // Insert at the End
@@ -129,20 +129,27 @@ template <class T>
 void Linked_List<T>::display()
 {
 
-    struct Node *t;
-    t = Head;
-
-    cout << "\n\n";
-
-    cout << "Head ==> ";
-    while (t != NULL)
+    if (Head == NULL)
     {
-        cout << t->data << " ==> ";
-
-        t = t->next;
+        cout << "\nList is empty" << endl;
     }
+    else
+    {
+        struct Node *t;
+        t = Head;
 
-    cout << "NULL" << endl;
+        cout << "\n\n";
+
+        cout << "Head ==> ";
+        while (t != NULL)
+        {
+            cout << t->data << " ==> ";
+
+            t = t->next;
+        }
+
+        cout << "NULL" << endl;
+    }
 }
 
 template <class T>
@@ -217,30 +224,20 @@ void Linked_List<T>::delete_Beg()
 }
 
 template <class T>
-void Linked_List<T>::delete_End(int len)
+void Linked_List<T>::delete_End()
 {
 
-    // for deleting middle and last Node
+    struct Node *current = Head;
 
-    //*p for getting on prev Node of getting deleted Node
-    struct Node *p = Head;
-    int location = len;
+    struct Node *prev;
 
-    //*q for selected Node of deletion
-    struct Node *q;
-    int i = 1;
-
-    while (i < location - 1)
+    while (current->next != NULL)
     {
-        p = p->next;
-        i++;
+        prev = current;
+        current = current->next;
     }
 
-    q = p->next;
-
-    p->next = q->next;
-    q->next = NULL;
-    free(q);
+    prev->next = NULL;
 
     cout << "\nNode deleted successfully\n";
 }
@@ -249,42 +246,41 @@ template <class T>
 void Linked_List<T>::delete_Position(int len)
 {
 
-    struct Node *temp;
+    // struct Node *temp;
     int location;
 
     cout << "\nEnter delete location: ";
     cin >> location;
 
-    // getting total length of the Node
-
-    if (location > len)
+    if (location == 1)
     {
-        cout << "\nInvalid location";
-        cout << "\nCurrent list is having " << len << " Nodes\n";
+        delete_Beg();
     }
-
-    // for deleting middle and last Node
-
-    //*p for getting on prev Node of getting deleted Node
-    struct Node *p = Head;
-
-    //*q for selected Node of deletion
-    struct Node *q;
-    int i = 1;
-
-    while (i < location - 1)
+    else
     {
-        p = p->next;
-        i++;
+        // for deleting middle and last Node
+
+        //*p for getting on prev Node of getting deleted Node
+        struct Node *p = Head;
+
+        //*q for selected Node of deletion
+        struct Node *q;
+        int i = 1;
+
+        while (i < location - 1)
+        {
+            p = p->next;
+            i++;
+        }
+
+        q = p->next;
+
+        p->next = q->next;
+        q->next = NULL;
+        free(q);
+
+        cout << "\nNode deleted successfully\n";
     }
-
-    q = p->next;
-
-    p->next = q->next;
-    q->next = NULL;
-    free(q);
-
-    cout << "\nNode deleted successfully\n";
 }
 
 int main()
@@ -338,10 +334,11 @@ int main()
             break;
 
         case 8:
-            L1.delete_End(len);
+            L1.delete_End();
             break;
 
         case 9:
+            len = L1.length();
             L1.delete_Position(len);
             break;
 
